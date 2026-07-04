@@ -139,7 +139,7 @@ fn build_command(path: &Path, ext: &str) -> Result<Command> {
 }
 
 pub struct SandboxOrchestrator {
-    backend: Arc<dyn SandboxBackend>,
+    pub backend: Arc<dyn SandboxBackend>,
     user_sim: Arc<dyn UserSimulator>,
     deception: Arc<dyn DeceptionEnvironment>,
     default_timeout_secs: u64,

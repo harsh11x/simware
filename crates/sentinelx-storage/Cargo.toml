@@ -1,6 +1,6 @@
 [package]
-name = "sentinelx-behavior"
-description = "Behavioral monitoring and correlation engine"
+name = "sentinelx-storage"
+description = "Persistent storage for analysis sessions and telemetry"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
@@ -9,6 +9,7 @@ license.workspace = true
 sentinelx-core = { workspace = true }
 tokio = { workspace = true }
 async-trait = { workspace = true }
+sqlx = { workspace = true }
 uuid = { workspace = true }
-chrono = { workspace = true }
+serde_json = { workspace = true }
 tracing = { workspace = true }

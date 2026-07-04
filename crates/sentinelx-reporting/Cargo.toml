@@ -1,6 +1,6 @@
 [package]
-name = "sentinelx-behavior"
-description = "Behavioral monitoring and correlation engine"
+name = "sentinelx-reporting"
+description = "Report generation and export"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
@@ -11,4 +11,4 @@ tokio = { workspace = true }
 async-trait = { workspace = true }
 uuid = { workspace = true }
 chrono = { workspace = true }
-tracing = { workspace = true }
+serde_json = { workspace = true }

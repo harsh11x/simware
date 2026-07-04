@@ -84,12 +84,12 @@ async fn verify_signature(_path: &Path) -> Result<SignatureInfo> {
 mod tests {
     use super::*;
     use tempfile::NamedTempFile;
-    use tokio::io::AsyncWriteExt;
+    use std::io::Write;
 
     #[tokio::test]
     async fn intercepts_existing_file() {
         let mut tmp = NamedTempFile::new().unwrap();
-        tmp.write_all(b"test payload").await.unwrap();
+        tmp.write_all(b"test payload").unwrap();
         let interceptor = DefaultInterceptor::default();
         let result = interceptor.intercept(tmp.path()).await.unwrap();
         assert!(!result.hash.sha256.is_empty());
