@@ -1,0 +1,15 @@
+[package]
+name = "sentinelx-interceptor"
+description = "Execution interception and session creation"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+sentinelx-core = { workspace = true }
+tokio = { workspace = true }
+async-trait = { workspace = true }
+tracing = { workspace = true }
+
+[dev-dependencies]
+tempfile = "3"
