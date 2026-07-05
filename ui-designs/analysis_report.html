@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SimWare - Incident Report</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-container": "#4d8eff",
+                        "on-secondary-fixed": "#151c25",
+                        "inverse-primary": "#005ac2",
+                        "inverse-on-surface": "#2e3038",
+                        "background": "#10131a",
+                        "secondary-fixed-dim": "#c0c7d3",
+                        "outline": "#8c909f",
+                        "secondary": "#c0c7d3",
+                        "on-background": "#e1e2ec",
+                        "on-tertiary-container": "#461f00",
+                        "surface-dim": "#10131a",
+                        "on-primary-fixed-variant": "#004395",
+                        "tertiary": "#ffb786",
+                        "primary-fixed-dim": "#adc6ff",
+                        "surface-container-lowest": "#0b0e15",
+                        "tertiary-container": "#df7412",
+                        "primary": "#adc6ff",
+                        "on-primary-fixed": "#001a42",
+                        "surface-tint": "#adc6ff",
+                        "secondary-container": "#404752",
+                        "on-secondary": "#2a313b",
+                        "primary-fixed": "#d8e2ff",
+                        "on-primary-container": "#00285d",
+                        "on-secondary-container": "#afb5c2",
+                        "on-primary": "#002e6a",
+                        "inverse-surface": "#e1e2ec",
+                        "on-tertiary-fixed": "#311400",
+                        "error": "#ffb4ab",
+                        "surface-bright": "#363941",
+                        "surface-container-low": "#191b23",
+                        "on-surface": "#e1e2ec",
+                        "on-error": "#690005",
+                        "surface-container": "#1d2027",
+                        "on-surface-variant": "#c2c6d6",
+                        "on-tertiary": "#502400",
+                        "surface": "#10131a",
+                        "outline-variant": "#424754",
+                        "tertiary-fixed": "#ffdcc6",
+                        "on-secondary-fixed-variant": "#404752",
+                        "on-tertiary-fixed-variant": "#723600",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-highest": "#32353c",
+                        "error-container": "#93000a",
+                        "surface-variant": "#32353c",
+                        "surface-container-high": "#272a31",
+                        "secondary-fixed": "#dce3f0",
+                        "tertiary-fixed-dim": "#ffb786"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "24px",
+                        "xs": "4px",
+                        "container-margin": "24px",
+                        "md": "16px",
+                        "xl": "32px",
+                        "sm": "8px",
+                        "gutter": "16px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "code-md": ["JetBrains Mono"],
+                        "display": ["Inter"],
+                        "h2": ["Inter"],
+                        "h1": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+                        "code-md": ["13px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "display": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+                        "h2": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "h1": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-sm": ["12px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Custom scrollbar for technical aesthetic */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #10131a; }
+        ::-webkit-scrollbar-thumb { background: #32353c; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #404752; }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md antialiased overflow-hidden flex h-screen">
+<!-- SideNavBar (Shared Component) -->
+<nav class="bg-surface-container text-primary font-label-md text-label-md docked left-0 h-screen w-60 border-r border-outline-variant flat no shadows fixed left-0 top-0 h-full flex flex-col pt-12 pb-md px-sm z-40">
+<div class="mb-xl px-md">
+<h1 class="font-h2 text-h2 text-on-surface font-extrabold tracking-tight">SimWare</h1>
+<p class="text-on-surface-variant mt-1 opacity-70">Analysis Platform</p>
+</div>
+<ul class="flex flex-col gap-xs flex-1 mt-md">
+<li>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                    Dashboard
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">biotech</span>
+                    Analyze
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">terminal</span>
+                    Live Sessions
+                </a>
+</li>
+<!-- Active Tab: Reports -->
+<li>
+<a class="flex items-center gap-md px-md py-sm rounded-lg bg-secondary-container text-on-secondary-container duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">assessment</span>
+                    Reports
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">security</span>
+                    Quarantine
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">psychology</span>
+                    Threat Intel
+                </a>
+</li>
+<li class="mt-auto">
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all duration-200 ease-in-out" href="#">
+<span class="material-symbols-outlined">settings</span>
+                    Settings
+                </a>
+</li>
+</ul>
+</nav>
+<!-- Main Content Wrapper -->
+<div class="flex-1 flex flex-col min-w-0 ml-60 h-screen relative">
+<!-- TopNavBar (Shared Component) -->
+<header class="bg-background text-primary font-body-md text-body-md border-b border-outline-variant flat no shadows flex justify-between items-center h-12 px-md w-full sticky top-0 z-30">
+<div class="flex items-center gap-md">
+<!-- Search Bar Placeholder -->
+<div class="flex items-center bg-surface-container-low border border-outline-variant rounded px-sm py-1">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">search</span>
+<input class="bg-transparent border-none text-on-surface focus:ring-0 text-sm w-48 ml-2 placeholder-on-surface-variant" placeholder="Search logs..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<button class="text-on-surface-variant hover:bg-surface-container-highest transition-colors p-1 rounded cursor-pointer active:scale-95">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="bg-primary text-on-primary px-sm py-1 rounded font-label-md text-label-md cursor-pointer active:scale-95 hover:bg-primary-container transition-colors">
+                    Analyze File
+                </button>
+</div>
+</header>
+<!-- Main Report Canvas -->
+<main class="flex-1 overflow-auto p-lg lg:p-xl bg-background pb-24">
+<div class="max-w-6xl mx-auto space-y-xl">
+<!-- Report Header & Actions -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-md border-b border-outline-variant pb-md">
+<div>
+<div class="flex items-center gap-sm mb-xs">
+<span class="px-2 py-0.5 rounded bg-error/10 text-error font-label-md text-label-md uppercase tracking-wider border border-error/20">Critical Incident</span>
+<span class="text-on-surface-variant font-code-md text-code-md">ID: INC-2023-8991</span>
+</div>
+<h1 class="font-display text-display text-on-surface">SimWare Incident Report</h1>
+</div>
+<div class="flex items-center gap-sm">
+<button class="flex items-center gap-xs px-md py-sm bg-surface-container border border-outline-variant rounded-md text-on-surface hover:bg-surface-container-highest transition-colors font-label-md text-label-md shadow-sm">
+<span class="material-symbols-outlined text-[18px]">picture_as_pdf</span>
+                            Export PDF
+                        </button>
+<button class="flex items-center gap-xs px-md py-sm bg-surface-container border border-outline-variant rounded-md text-on-surface hover:bg-surface-container-highest transition-colors font-label-md text-label-md shadow-sm">
+<span class="material-symbols-outlined text-[18px]">share</span>
+                            Share
+                        </button>
+<button class="flex items-center gap-xs px-md py-sm bg-error text-on-error rounded-md hover:opacity-90 transition-opacity font-label-md text-label-md font-semibold shadow-sm shadow-error/20">
+<span class="material-symbols-outlined text-[18px]">block</span>
+                            Quarantine All
+                        </button>
+</div>
+</div>
+<!-- Executive Summary (Bento Layout) -->
+<section>
+<h2 class="font-h2 text-h2 text-on-surface mb-md">Executive Summary</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-md">
+<!-- Risk Score Card -->
+<div class="bg-surface-container border border-outline-variant rounded-lg p-md flex flex-col justify-between relative overflow-hidden">
+<div class="absolute -right-4 -top-4 opacity-5 text-error">
+<span class="material-symbols-outlined text-[120px]">warning</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Overall Risk Score</span>
+<div class="mt-sm flex items-baseline gap-xs">
+<span class="text-5xl font-display font-bold text-error">88</span>
+<span class="text-on-surface-variant text-lg">/ 100</span>
+</div>
+<div class="w-full bg-surface-container-highest h-2 rounded-full mt-md overflow-hidden">
+<div class="bg-error h-full rounded-full" style="width: 88%"></div>
+</div>
+</div>
+<!-- Threat Class Card -->
+<div class="bg-surface-container border border-outline-variant border-l-4 border-l-error rounded-lg p-md flex flex-col justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Threat Classification</span>
+<div class="mt-sm flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-error/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-error">lock_person</span>
+</div>
+<div>
+<p class="font-h1 text-h1 text-on-surface">Ransomware</p>
+<p class="font-body-sm text-body-sm text-secondary">Family: LockBit 3.0 (Variant)</p>
+</div>
+</div>
+</div>
+<!-- Temporal Data Card -->
+<div class="bg-surface-container border border-outline-variant rounded-lg p-md flex flex-col justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Temporal Data</span>
+<div class="space-y-sm mt-sm">
+<div class="flex justify-between items-center border-b border-surface-variant pb-xs">
+<span class="text-on-surface-variant font-body-sm text-body-sm">Initial Detection</span>
+<span class="text-on-surface font-code-md text-code-md">2023-10-27 14:32:01 UTC</span>
+</div>
+<div class="flex justify-between items-center border-b border-surface-variant pb-xs">
+<span class="text-on-surface-variant font-body-sm text-body-sm">Dwell Time</span>
+<span class="text-on-surface font-code-md text-code-md">4h 12m</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-on-surface-variant font-body-sm text-body-sm">Status</span>
+<span class="text-error font-body-sm text-body-sm flex items-center gap-xs"><span class="w-2 h-2 rounded-full bg-error animate-pulse"></span> Active Propagation</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Technical Evidence -->
+<section>
+<div class="flex items-center justify-between mb-md">
+<h2 class="font-h2 text-h2 text-on-surface">Technical Evidence</h2>
+<a class="font-label-md text-label-md text-primary-fixed-dim hover:text-primary transition-colors flex items-center gap-xs" href="#">
+                            View Raw Logs <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+</div>
+<div class="space-y-lg">
+<!-- Registry Keys Table -->
+<div class="bg-surface-container border border-outline-variant rounded-lg overflow-hidden">
+<div class="bg-surface-container-high px-md py-sm border-b border-outline-variant flex items-center gap-sm">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">data_object</span>
+<h3 class="font-label-md text-label-md text-on-surface uppercase tracking-wider">Modified Registry Keys</h3>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container/50 border-b border-outline-variant">
+<th class="font-label-md text-label-md text-secondary px-md py-sm font-medium">Action</th>
+<th class="font-label-md text-label-md text-secondary px-md py-sm font-medium">Key Path</th>
+<th class="font-label-md text-label-md text-secondary px-md py-sm font-medium">Value Modified</th>
+</tr>
+</thead>
+<tbody class="font-code-md text-code-md text-on-surface">
+<tr class="border-b border-surface-variant hover:bg-surface-container-high transition-colors group">
+<td class="px-md py-sm"><span class="text-tertiary-container">Modified</span></td>
+<td class="px-md py-sm text-secondary truncate max-w-[300px]" title="HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run\SystemUpdate">HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run\SystemUpdate</td>
+<td class="px-md py-sm truncate max-w-[200px]">C:\Users\Admin\AppData\Local\Temp\svchost.exe</td>
+</tr>
+<tr class="border-b border-surface-variant hover:bg-surface-container-high transition-colors group">
+<td class="px-md py-sm"><span class="text-error">Deleted</span></td>
+<td class="px-md py-sm text-secondary truncate max-w-[300px]">HKLM\SYSTEM\CurrentControlSet\Services\VSS</td>
+<td class="px-md py-sm text-on-surface-variant italic">Shadow Copy Service Disabled</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-md py-sm"><span class="text-primary-fixed-dim">Created</span></td>
+<td class="px-md py-sm text-secondary truncate max-w-[300px]">HKCU\SOFTWARE\LockBit\EncryptionKey</td>
+<td class="px-md py-sm truncate max-w-[200px]">0x8F9A...3B21</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Network Connections Table -->
+<div class="bg-surface-container border border-outline-variant rounded-lg overflow-hidden">
+<div class="bg-surface-container-high px-md py-sm border-b border-outline-variant flex items-center gap-sm">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">lan</span>
+<h3 class="font-label-md text-label-md text-on-surface uppercase tracking-wider">Anomalous Network Connections</h3>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container/50 border-b border-outline-variant">
+<th class="font-label-md text-label-md text-secondary px-md py-sm font-medium">Protocol</th>
+<th class="font-label-md text-label-md text-secondary px-md py-sm font-medium">Remote IP : Port</th>
+<th class="font-label-md text-label-md text-secondary px-md py-sm font-medium">State</th>
+<th class="font-label-md text-label-md text-secondary px-md py-sm font-medium">Process</th>
+</tr>
+</thead>
+<tbody class="font-code-md text-code-md text-on-surface">
+<tr class="border-b border-surface-variant hover:bg-surface-container-high transition-colors">
+<td class="px-md py-sm text-on-surface-variant">TCP</td>
+<td class="px-md py-sm text-error">185.20.19.44 : 443</td>
+<td class="px-md py-sm">ESTABLISHED</td>
+<td class="px-md py-sm text-secondary">powershell.exe</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-md py-sm text-on-surface-variant">UDP</td>
+<td class="px-md py-sm text-tertiary-container">91.121.14.3 : 53</td>
+<td class="px-md py-sm">SYN_SENT</td>
+<td class="px-md py-sm text-secondary">svchost.exe (Spoofed)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<!-- Visualizations: Event Timeline -->
+<section>
+<h2 class="font-h2 text-h2 text-on-surface mb-md">Event Sequence</h2>
+<div class="relative border-l-2 border-outline-variant ml-sm space-y-md pb-md">
+<!-- Timeline Item 1 -->
+<div class="relative pl-lg group">
+<div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-surface-container border-2 border-primary-fixed-dim group-hover:bg-primary-fixed-dim transition-colors"></div>
+<div class="bg-surface-container border border-outline-variant rounded-lg p-md cursor-pointer hover:border-primary-fixed-dim transition-colors" onclick="this.classList.toggle('bg-surface-container-highest'); this.nextElementSibling.classList.toggle('hidden')">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary-fixed-dim">terminal</span>
+<div>
+<h4 class="font-body-lg text-body-lg text-on-surface font-medium">Process Creation</h4>
+<p class="font-label-md text-label-md text-secondary mt-0.5">Suspicious macro execution detected.</p>
+</div>
+</div>
+<span class="font-code-md text-code-md text-on-surface-variant text-sm">14:32:01.002</span>
+</div>
+</div>
+<!-- Expandable Content -->
+<div class="hidden bg-black border border-t-0 border-outline-variant rounded-b-lg p-sm pl-lg mt-[-4px] overflow-x-auto">
+<pre class="font-code-md text-code-md text-on-surface-variant"><code class="text-tertiary">Parent:</code> winword.exe (PID: 4192)
+<code class="text-tertiary">Child:</code> cmd.exe (PID: 8812)
+<code class="text-tertiary">CmdLine:</code> cmd.exe /c powershell.exe -w hidden -enc JABzAD0ATgBlAHcALQBPAGIAagBlAGMAdAAgAEkATwAuAE0AZQBtAG8AcgB5AFMAdAByAGUAYQBtACgAWwBDAG8AbgB2AGUAcgB0AF0AOgA6AEYAcgBvAG0AQgBhAHMAZQA2ADQAUwB0AHIAaQBuAGcAKAAiAEgA...</pre>
+</div>
+</div>
+<!-- Timeline Item 2 -->
+<div class="relative pl-lg group">
+<div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-surface-container border-2 border-tertiary-container group-hover:bg-tertiary-container transition-colors"></div>
+<div class="bg-surface-container border border-outline-variant rounded-lg p-md cursor-pointer hover:border-tertiary-container transition-colors" onclick="this.classList.toggle('bg-surface-container-highest'); this.nextElementSibling.classList.toggle('hidden')">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-tertiary-container">cloud_download</span>
+<div>
+<h4 class="font-body-lg text-body-lg text-on-surface font-medium">Network Beacon</h4>
+<p class="font-label-md text-label-md text-secondary mt-0.5">Connection to known C2 infrastructure.</p>
+</div>
+</div>
+<span class="font-code-md text-code-md text-on-surface-variant text-sm">14:32:05.114</span>
+</div>
+</div>
+<!-- Expandable Content (Hidden by default) -->
+<div class="hidden bg-black border border-t-0 border-outline-variant rounded-b-lg p-sm pl-lg mt-[-4px] overflow-x-auto">
+<pre class="font-code-md text-code-md text-on-surface-variant"><code class="text-tertiary">Dest IP:</code> 185.20.19.44
+<code class="text-tertiary">Port:</code> 443 (HTTPS)
+<code class="text-tertiary">Bytes Sent:</code> 1.2 KB
+<code class="text-tertiary">Bytes Recv:</code> 8.4 MB (Payload Download)</pre>
+</div>
+</div>
+<!-- Timeline Item 3 -->
+<div class="relative pl-lg group">
+<div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-surface-container border-2 border-error group-hover:bg-error transition-colors"></div>
+<div class="bg-surface-container border border-outline-variant rounded-lg p-md border-l-4 border-l-error shadow-sm shadow-error/10">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-error">description</span>
+<div>
+<h4 class="font-body-lg text-body-lg text-on-surface font-medium">Mass File Write (Encryption)</h4>
+<p class="font-label-md text-label-md text-secondary mt-0.5">Rapid modification of user documents.</p>
+</div>
+</div>
+<span class="font-code-md text-code-md text-on-surface-variant text-sm">14:32:12.890</span>
+</div>
+<div class="mt-sm pt-sm border-t border-surface-variant flex gap-sm flex-wrap">
+<span class="px-2 py-1 rounded bg-surface-container-high text-secondary font-code-md text-[11px] border border-outline-variant">C:\Users\Admin\Documents\Q3_Report.pdf.locked</span>
+<span class="px-2 py-1 rounded bg-surface-container-high text-secondary font-code-md text-[11px] border border-outline-variant">C:\Users\Admin\Desktop\passwords.txt.locked</span>
+<span class="px-2 py-1 rounded bg-surface-container-high text-secondary font-code-md text-[11px] border border-outline-variant border-dashed">+ 4,219 more files</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</div>
+<!-- Footer (Shared Component) -->
+<footer class="bg-surface-container-lowest text-tertiary font-label-md text-label-md border-t border-outline-variant flat no shadows fixed bottom-0 left-0 w-full flex items-center justify-between px-md py-xs z-50 pl-64">
+<!-- Added pl-64 to account for the sidebar width so content centers correctly in the remaining space, though JSON says left-0 w-full. I will stick to JSON exact string but add a nested div for layout if needed, or just append pl-60 to keep it from hiding behind sidebar -->
+<div class="flex items-center justify-between w-full ml-60 px-md">
+<span class="font-body-sm text-body-sm text-on-surface-variant">System Status: Operational | Engine Health: 99.8% | Connectivity: Latency 12ms</span>
+<div class="flex gap-md">
+<a class="text-on-surface-variant hover:text-primary transition-opacity" href="#">Docs</a>
+<a class="text-on-surface-variant hover:text-primary transition-opacity" href="#">Support</a>
+<a class="text-on-surface-variant hover:text-primary transition-opacity" href="#">API</a>
+</div>
+</div>
+</footer>
+</body></html>

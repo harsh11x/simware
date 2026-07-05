@@ -1,0 +1,46 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Analysis {
+  id              String   @id @default(uuid())
+  fileHash        String   @map("file_hash")
+  fileName        String?  @map("file_name")
+  status          String
+  aiRiskScore     Float?   @map("ai_risk_score")
+  finalDecision   String?  @map("final_decision")
+  createdAt       DateTime @default(now()) @map("created_at")
+  telemetryEvents TelemetryEvent[]
+  classifications ThreatClassification[]
+
+  @@map("analyses")
+}
+
+model TelemetryEvent {
+  id          String   @id @default(uuid())
+  analysisId  String   @map("analysis_id")
+  eventType   String   @map("event_type")
+  processName String?  @map("process_name")
+  target      String?
+  timestamp   DateTime @default(now())
+  
+  analysis    Analysis @relation(fields: [analysisId], references: [id])
+
+  @@map("telemetry_events")
+}
+
+model ThreatClassification {
+  id          String   @id @default(uuid())
+  analysisId  String   @map("analysis_id")
+  category    String
+  confidence  Float
+  
+  analysis    Analysis @relation(fields: [analysisId], references: [id])
+
+  @@map("threat_classifications")
+}

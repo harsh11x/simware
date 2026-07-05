@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SimWare Global Search</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary-container": "#4d8eff",
+                      "on-secondary-fixed": "#151c25",
+                      "inverse-primary": "#005ac2",
+                      "inverse-on-surface": "#2e3038",
+                      "background": "#10131a",
+                      "secondary-fixed-dim": "#c0c7d3",
+                      "outline": "#8c909f",
+                      "secondary": "#c0c7d3",
+                      "on-background": "#e1e2ec",
+                      "on-tertiary-container": "#461f00",
+                      "surface-dim": "#10131a",
+                      "on-primary-fixed-variant": "#004395",
+                      "tertiary": "#ffb786",
+                      "primary-fixed-dim": "#adc6ff",
+                      "surface-container-lowest": "#0b0e15",
+                      "tertiary-container": "#df7412",
+                      "primary": "#adc6ff",
+                      "on-primary-fixed": "#001a42",
+                      "surface-tint": "#adc6ff",
+                      "secondary-container": "#404752",
+                      "on-secondary": "#2a313b",
+                      "primary-fixed": "#d8e2ff",
+                      "on-primary-container": "#00285d",
+                      "on-secondary-container": "#afb5c2",
+                      "on-primary": "#002e6a",
+                      "inverse-surface": "#e1e2ec",
+                      "on-tertiary-fixed": "#311400",
+                      "error": "#ffb4ab",
+                      "surface-bright": "#363941",
+                      "surface-container-low": "#191b23",
+                      "on-surface": "#e1e2ec",
+                      "on-error": "#690005",
+                      "surface-container": "#1d2027",
+                      "on-surface-variant": "#c2c6d6",
+                      "on-tertiary": "#502400",
+                      "surface": "#10131a",
+                      "outline-variant": "#424754",
+                      "tertiary-fixed": "#ffdcc6",
+                      "on-secondary-fixed-variant": "#404752",
+                      "on-tertiary-fixed-variant": "#723600",
+                      "on-error-container": "#ffdad6",
+                      "surface-container-highest": "#32353c",
+                      "error-container": "#93000a",
+                      "surface-variant": "#32353c",
+                      "surface-container-high": "#272a31",
+                      "secondary-fixed": "#dce3f0",
+                      "tertiary-fixed-dim": "#ffb786"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "lg": "24px",
+                      "xs": "4px",
+                      "container-margin": "24px",
+                      "md": "16px",
+                      "xl": "32px",
+                      "sm": "8px",
+                      "gutter": "16px",
+                      "unit": "8px"
+              },
+              "fontFamily": {
+                      "body-md": ["Inter"],
+                      "label-md": ["Inter"],
+                      "code-md": ["JetBrains Mono"],
+                      "display": ["Inter"],
+                      "h2": ["Inter"],
+                      "h1": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "body-lg": ["Inter"]
+              },
+              "fontSize": {
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                      "code-md": ["13px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "display": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                      "h2": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "h1": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "body-sm": ["12px", {"lineHeight": "18px", "fontWeight": "400"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+              }
+      }
+          },
+        }
+    </script>
+<style>
+        body { background-color: #0F1115; }
+        .kbd-key {
+            padding: 2px 6px;
+            border-radius: 4px;
+            background-color: #242830;
+            border: 1px solid #2D333B;
+            color: #c2c6d6;
+            font-family: "JetBrains Mono", monospace;
+            font-size: 11px;
+            line-height: 1;
+        }
+    </style>
+</head>
+<body class="text-on-background font-body-md bg-background min-h-screen flex items-center justify-center relative overflow-hidden">
+<!-- Simulated background dashboard context (blurred) -->
+<div class="absolute inset-0 opacity-20 pointer-events-none" data-alt="A dark, sophisticated cybersecurity dashboard interface with complex data visualizations, glowing network graphs, and scrolling matrix-like code blocks, set in a moody, high-stakes operational control center." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDLKhR4ukjognmsMaE-2cetp5GetM_hPwRgO6X5DPgq7nVi17d5f08qpeML4KbYPF9Rdc-LEJbIRgdiamXlSHs2iyFqykSDxAHuN-l2vncCXLmv5Yf07oZ99yWY7CdawlnZDrtYz5ubH5pQk2HajNIsl44u-izLUysyh9BW4hkvfBoV90l_scmU2l6Lh5BJB6wSxUIygTeqtta7qBArXV2bh7r_jRNJJAWr6Lrq94_WkDli5fE6Lqoywg'); background-size: cover;"></div>
+<!-- Modal Backdrop -->
+<div class="fixed inset-0 bg-background/80 backdrop-blur-sm z-40"></div>
+<!-- Search Overlay Container -->
+<div class="relative z-50 w-full max-w-[640px] bg-surface-container rounded-xl shadow-[0_4px_24px_rgba(0,0,0,0.8)] border border-outline-variant overflow-hidden flex flex-col">
+<!-- Search Input Header -->
+<div class="flex items-center px-md py-md border-b border-outline-variant bg-surface-container-high">
+<span class="material-symbols-outlined text-on-surface-variant text-h2 mr-sm">search</span>
+<input autofocus="" class="flex-1 bg-transparent border-none text-h2 font-h2 text-on-surface focus:ring-0 placeholder-on-surface-variant/50 p-0" placeholder="Search files, hashes, IPs, or reports..." type="text"/>
+</div>
+<!-- Search Results Area -->
+<div class="flex-1 overflow-y-auto max-h-[400px] p-sm">
+<!-- Category: Recent Searches -->
+<div class="mb-sm">
+<div class="px-sm py-xs text-label-md font-label-md text-on-surface-variant uppercase tracking-wider mb-xs">Recent Searches</div>
+<a class="flex items-center px-sm py-[6px] rounded-lg hover:bg-surface-container-highest group transition-colors" href="#">
+<span class="material-symbols-outlined text-on-surface-variant mr-sm text-[18px]">history</span>
+<span class="flex-1 text-body-md font-body-md text-on-surface">d98f12a...e7b</span>
+<span class="text-label-md font-label-md text-on-surface-variant bg-surface-container-lowest px-2 py-1 rounded border border-outline-variant group-hover:bg-surface-container-high">Hash</span>
+</a>
+<a class="flex items-center px-sm py-[6px] rounded-lg hover:bg-surface-container-highest group transition-colors" href="#">
+<span class="material-symbols-outlined text-on-surface-variant mr-sm text-[18px]">history</span>
+<span class="flex-1 text-body-md font-body-md text-on-surface">192.168.1.105</span>
+<span class="text-label-md font-label-md text-on-surface-variant bg-surface-container-lowest px-2 py-1 rounded border border-outline-variant group-hover:bg-surface-container-high">IP</span>
+</a>
+</div>
+<!-- Category: Files -->
+<div class="mb-sm">
+<div class="px-sm py-xs text-label-md font-label-md text-on-surface-variant uppercase tracking-wider mb-xs">Files</div>
+<a class="flex items-center px-sm py-[6px] rounded-lg bg-surface-container-highest group transition-colors border-l-[3px] border-l-error" href="#">
+<span class="material-symbols-outlined text-error mr-sm text-[18px]">description</span>
+<span class="flex-1 text-body-md font-body-md text-on-surface">payload_v2.exe</span>
+<span class="text-label-md font-label-md text-error bg-error/10 px-2 py-1 rounded border border-error/20">Critical</span>
+</a>
+<a class="flex items-center px-sm py-[6px] rounded-lg hover:bg-surface-container-highest group transition-colors" href="#">
+<span class="material-symbols-outlined text-on-surface-variant mr-sm text-[18px]">description</span>
+<span class="flex-1 text-body-md font-body-md text-on-surface">config.json</span>
+<span class="text-label-md font-label-md text-on-surface-variant bg-surface-container-lowest px-2 py-1 rounded border border-outline-variant group-hover:bg-surface-container-high">Benign</span>
+</a>
+</div>
+<!-- Category: Reports -->
+<div class="mb-sm">
+<div class="px-sm py-xs text-label-md font-label-md text-on-surface-variant uppercase tracking-wider mb-xs">Reports</div>
+<a class="flex items-center px-sm py-[6px] rounded-lg hover:bg-surface-container-highest group transition-colors" href="#">
+<span class="material-symbols-outlined text-primary mr-sm text-[18px]">assessment</span>
+<div class="flex-1">
+<div class="text-body-md font-body-md text-on-surface">Q3 Threat Analysis Summary</div>
+<div class="text-label-md font-label-md text-on-surface-variant">Generated 2 hours ago</div>
+</div>
+</a>
+</div>
+<!-- Category: Processes -->
+<div>
+<div class="px-sm py-xs text-label-md font-label-md text-on-surface-variant uppercase tracking-wider mb-xs">Processes</div>
+<a class="flex items-center px-sm py-[6px] rounded-lg hover:bg-surface-container-highest group transition-colors" href="#">
+<span class="material-symbols-outlined text-tertiary mr-sm text-[18px]">terminal</span>
+<div class="flex-1">
+<div class="text-body-md font-body-md text-on-surface font-code-md">svchost.exe</div>
+<div class="text-label-md font-label-md text-on-surface-variant">PID: 4892</div>
+</div>
+</a>
+</div>
+</div>
+<!-- Footer / Keyboard Shortcuts -->
+<div class="flex items-center justify-between px-md py-sm border-t border-outline-variant bg-surface-container-lowest text-label-md font-label-md text-on-surface-variant">
+<div class="flex items-center gap-md">
+<span class="flex items-center gap-xs"><span class="kbd-key">↑</span><span class="kbd-key">↓</span> Navigate</span>
+<span class="flex items-center gap-xs"><span class="kbd-key">↵</span> Open</span>
+</div>
+<div class="flex items-center gap-md">
+<span class="flex items-center gap-xs"><span class="kbd-key">esc</span> Close</span>
+</div>
+</div>
+</div>
+</body></html>
