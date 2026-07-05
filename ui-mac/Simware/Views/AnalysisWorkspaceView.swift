@@ -1,6 +1,11 @@
 import SwiftUI
 
 struct AnalysisWorkspaceView: View {
+    @StateObject private var apiService = ApiService()
+    @State private var activeAnalysisId = "1f2780d9-1307-46ba-b110-a79d407f4392"
+    @State private var latestAnalysis: Analysis? = nil
+    let timer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
+    
     @State private var codeOutput = """
     [10:42:01] Process created: C:\\Windows\\System32\\cmd.exe
     [10:42:02] Network connection attempt to 192.168.1.104:443
@@ -84,6 +89,17 @@ struct AnalysisWorkspaceView: View {
                 Spacer()
             }
             .padding(32)
+        }
+        .onReceive(timer) { _ in
+            Task {
+                do {
+                    let analysis = try await apiService.getAnalysis(id: activeAnalysisId)
+                    self.latestAnalysis = analysis
+                    // In a real implementation we would update the UI state with analysis.aiRiskScore, etc.
+                } catch {
+                    print("Failed to fetch analysis: \\(error)")
+                }
+            }
         }
     }
 }
