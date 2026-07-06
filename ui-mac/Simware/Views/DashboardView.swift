@@ -2,6 +2,7 @@ import SwiftUI
 
 struct DashboardView: View {
     @State private var selectedTab: String? = "Dashboard"
+    @State private var activeAnalysisId: String? = nil
     
     var body: some View {
         NavigationView {
@@ -57,11 +58,11 @@ struct DashboardView: View {
                 Color.simwareBackground.ignoresSafeArea()
                 
                 if selectedTab == "Dashboard" {
-                    DashboardContent()
+                    DashboardContent(selectedTab: $selectedTab, activeAnalysisId: $activeAnalysisId)
                 } else if selectedTab == "Workspace" {
-                    AnalysisWorkspaceView()
+                    AnalysisWorkspaceView(activeAnalysisId: activeAnalysisId ?? "")
                 } else if selectedTab == "Search" {
-                    GlobalSearchView()
+                    GlobalSearchView(selectedTab: $selectedTab, activeAnalysisId: $activeAnalysisId)
                 } else {
                     Text("Coming Soon")
                         .font(SimwareTypography.h1())
@@ -70,7 +71,6 @@ struct DashboardView: View {
             }
         }
         .navigationViewStyle(DoubleColumnNavigationViewStyle())
-        .background(Color.simwareBackground)
     }
 }
 
@@ -104,6 +104,11 @@ struct SidebarItem: View {
 }
 
 struct DashboardContent: View {
+    @StateObject private var apiService = ApiService()
+    @State private var stats: DashboardStats?
+    @Binding var selectedTab: String?
+    @Binding var activeAnalysisId: String?
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 32) {
@@ -115,36 +120,70 @@ struct DashboardContent: View {
                     
                     Spacer()
                     
-                    SimwareButton(title: "Export Report", action: {})
+                    SimwareButton(title: "Manual Scan", action: {
+                        Task {
+                            if let id = try? await apiService.triggerManualScan(fileName: "manual_upload.exe") {
+                                activeAnalysisId = id
+                                selectedTab = "Workspace"
+                            }
+                        }
+                    })
                 }
                 
-                // Metrics
-                HStack(spacing: 24) {
-                    MetricCard(title: "Files Analyzed", value: "1,248", trend: "↑ 12% vs last week", trendColor: .simwareTextSecondary)
-                    MetricCard(title: "Threats Blocked", value: "14", trend: "↑ 3 new threats", trendColor: .simwareDanger, isAlert: true)
-                    MetricCard(title: "Avg Analysis Time", value: "1.2s", trend: "Optimal", trendColor: .simwareSuccess)
-                }
-                
-                // Recent Activity
-                VStack(alignment: .leading, spacing: 16) {
-                    Text("Recent Simulations")
-                        .font(SimwareTypography.h2())
-                        .foregroundColor(.simwareTextPrimary)
+                if let stats = stats {
+                    // Metrics
+                    HStack(spacing: 24) {
+                        MetricCard(title: "Files Analyzed", value: "\\(stats.totalAnalyzed)", trend: "All time", trendColor: .simwareTextSecondary)
+                        MetricCard(title: "Threats Blocked", value: "\\(stats.threatsBlocked)", trend: "All time", trendColor: .simwareDanger, isAlert: stats.threatsBlocked > 0)
+                        MetricCard(title: "Avg Analysis Time", value: stats.avgAnalysisTime, trend: "Optimal", trendColor: .simwareSuccess)
+                    }
                     
-                    SimwareCard {
-                        VStack(spacing: 0) {
-                            ActivityRow(filename: "installer_v2.exe", hash: "a2b4...9f01", status: "Clean", color: .simwareSuccess)
-                            Divider().background(Color.simwareBorder)
-                            ActivityRow(filename: "invoice_update.pdf.exe", hash: "f7c9...33d2", status: "Malicious", color: .simwareDanger)
-                            Divider().background(Color.simwareBorder)
-                            ActivityRow(filename: "npm_install_script.sh", hash: "b88a...11e4", status: "Suspicious", color: .simwareWarning)
+                    // Recent Activity
+                    VStack(alignment: .leading, spacing: 16) {
+                        Text("Recent Simulations")
+                            .font(SimwareTypography.h2())
+                            .foregroundColor(.simwareTextPrimary)
+                        
+                        SimwareCard {
+                            VStack(spacing: 0) {
+                                ForEach(Array(stats.recentActivity.enumerated()), id: \\.element.id) { index, activity in
+                                    ActivityRow(
+                                        filename: activity.fileName ?? "unknown",
+                                        hash: String((activity.fileHash ?? "").prefix(12)) + "...",
+                                        status: activity.finalDecision ?? activity.status,
+                                        color: (activity.finalDecision == "BLOCK") ? .simwareDanger : (activity.status == "completed" ? .simwareSuccess : .simwareWarning),
+                                        action: {
+                                            activeAnalysisId = activity.id
+                                            selectedTab = "Workspace"
+                                        },
+                                        exportAction: {
+                                            apiService.exportReport(id: activity.id)
+                                        }
+                                    )
+                                    if index < stats.recentActivity.count - 1 {
+                                        Divider().background(Color.simwareBorder)
+                                    }
+                                }
+                                if stats.recentActivity.isEmpty {
+                                    Text("No recent activity.")
+                                        .padding()
+                                        .foregroundColor(.simwareTextSecondary)
+                                }
+                            }
                         }
                     }
+                } else {
+                    ProgressView("Loading Stats...")
+                        .padding(32)
                 }
-                
                 Spacer()
             }
             .padding(32)
+            .onAppear {
+                Task {
+                    stats = try? await apiService.getStats()
+                }
+            }
         }
     }
 }

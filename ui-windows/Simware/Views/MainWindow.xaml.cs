@@ -55,5 +55,15 @@ namespace Simware.Views
         {
             btn.Background = Brushes.Transparent;
         }
+
+        public void NavigateToWorkspace(string analysisId)
+        {
+            ResetNavStyle(NavDashboard);
+            ResetNavStyle(NavSearch);
+            NavWorkspace.Background = (Brush)Application.Current.Resources["SurfaceLighterBrush"];
+            
+            workspaceView.SetActiveAnalysis(analysisId);
+            MainContent.Content = workspaceView;
+        }
     }
 }

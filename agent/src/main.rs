@@ -2,6 +2,7 @@ mod interceptor;
 mod sandbox;
 mod telemetry;
 mod api_client;
+mod quarantine;
 
 use interceptor::{ExecutionInterceptor, NativeInterceptor};
 use sandbox::{SandboxOrchestrator, QemuSandbox};
@@ -55,6 +56,9 @@ fn main() {
                         
                         if decision == "BLOCK" {
                             println!("[Interceptor] Permanently blocking execution of {}", target_file);
+                            if let Err(e) = quarantine::quarantine_file(target_file) {
+                                eprintln!("[Quarantine] Failed to quarantine file: {}", e);
+                            }
                         } else {
                             println!("[Interceptor] Allowing execution of {}", target_file);
                         }

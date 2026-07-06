@@ -1,7 +1,13 @@
 import SwiftUI
 
 struct GlobalSearchView: View {
+    @Binding var selectedTab: String?
+    @Binding var activeAnalysisId: String?
+    
     @State private var searchText: String = ""
+    @State private var searchResults: [Analysis] = []
+    @State private var isSearching = false
+    @StateObject private var apiService = ApiService()
     
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
@@ -14,10 +20,17 @@ struct GlobalSearchView: View {
                 Image(systemName: "magnifyingglass")
                     .foregroundColor(.simwareTextSecondary)
                 
-                TextField("Search by SHA-256 hash, filename, or IP address...", text: $searchText)
+                TextField("Search by SHA-256 hash or filename...", text: $searchText)
                     .font(SimwareTypography.bodyLg())
                     .textFieldStyle(PlainTextFieldStyle())
                     .foregroundColor(.simwareTextPrimary)
+                    .onChange(of: searchText) { newValue in
+                        performSearch(query: newValue)
+                    }
+                
+                if isSearching {
+                    ProgressView().scaleEffect(0.5)
+                }
             }
             .padding(16)
             .background(Color.simwareBackground)
@@ -41,15 +54,50 @@ struct GlobalSearchView: View {
             } else {
                 ScrollView {
                     VStack(spacing: 16) {
-                        ActivityRow(filename: "search_result.exe", hash: "a1b2c3d4", status: "Clean", color: .simwareSuccess)
+                        ForEach(searchResults) { result in
+                            ActivityRow(
+                                filename: result.fileName ?? "unknown",
+                                hash: result.fileHash ?? "",
+                                status: result.finalDecision ?? result.status,
+                                color: (result.finalDecision == "BLOCK") ? .simwareDanger : (result.status == "completed" ? .simwareSuccess : .simwareWarning),
+                                action: {
+                                    activeAnalysisId = result.id
+                                    selectedTab = "Workspace"
+                                },
+                                exportAction: {
+                                    apiService.exportReport(id: result.id)
+                                }
+                            )
                             .padding(16)
                             .background(Color.simwareSurface)
                             .cornerRadius(12)
                             .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.simwareBorder, lineWidth: 1))
+                        }
+                        
+                        if searchResults.isEmpty && !isSearching {
+                            Text("No results found.")
+                                .foregroundColor(.simwareTextSecondary)
+                                .padding()
+                        }
                     }
                 }
             }
         }
         .padding(32)
+    }
+    
+    private func performSearch(query: String) {
+        guard !query.isEmpty else {
+            searchResults = []
+            return
+        }
+        isSearching = true
+        Task {
+            do {
+                searchResults = try await apiService.searchAnalyses(query: query)
+            } catch {
+                print("Search failed: \\(error)")
+            }
+            isSearching = false
     }
 }

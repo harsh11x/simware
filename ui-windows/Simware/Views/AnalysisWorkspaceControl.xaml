@@ -15,18 +15,12 @@
                 <Grid>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="🖥️" Margin="0,0,12,0"/>
-                        <TextBlock Text="Active Sandbox: vm-windows-10-testbed" Style="{StaticResource BodyMdFont}"/>
+                        <TextBlock x:Name="TxtActiveSandbox" Text="Active Sandbox: None" Style="{StaticResource BodyMdFont}"/>
                     </StackPanel>
                     
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Border Background="#1A238636" CornerRadius="8" Padding="8,4" Margin="0,0,8,0">
-                            <TextBlock Text="ISOLATED" Foreground="{StaticResource SuccessBrush}" Style="{StaticResource LabelMdFont}"/>
-                        </Border>
-                        <Border Background="#1A9CA3AF" CornerRadius="8" Padding="8,4" Margin="0,0,8,0">
-                            <TextBlock Text="CPU: 45%" Foreground="{StaticResource TextSecondaryBrush}" Style="{StaticResource LabelMdFont}"/>
-                        </Border>
-                        <Border Background="#1A9CA3AF" CornerRadius="8" Padding="8,4">
-                            <TextBlock Text="RAM: 2.4GB" Foreground="{StaticResource TextSecondaryBrush}" Style="{StaticResource LabelMdFont}"/>
+                        <Border x:Name="BorderStatus" Background="#1A238636" CornerRadius="8" Padding="8,4" Margin="0,0,8,0">
+                            <TextBlock x:Name="TxtStatus" Text="IDLE" Foreground="{StaticResource SuccessBrush}" Style="{StaticResource LabelMdFont}"/>
                         </Border>
                     </StackPanel>
                 </Grid>
@@ -46,7 +40,7 @@
                             <Rectangle Fill="{StaticResource PrimaryBrush}" Width="4" HorizontalAlignment="Left" />
                             <StackPanel Padding="16,16,16,16" Margin="4,0,0,0">
                                 <TextBlock Text="Process Tree" Style="{StaticResource H2Font}" Margin="0,0,0,16"/>
-                                <TextBlock Text="explorer.exe (PID: 2341)&#10; ↳ installer.exe (PID: 4402)&#10;    ↳ powershell.exe (PID: 4410)" Style="{StaticResource CodeMdFont}"/>
+                                <TextBlock Text="Pending telemetry..." Style="{StaticResource CodeMdFont}"/>
                             </StackPanel>
                         </Grid>
                     </Border>
@@ -56,7 +50,7 @@
                             <Rectangle Fill="{StaticResource WarningBrush}" Width="4" HorizontalAlignment="Left" />
                             <StackPanel Padding="16,16,16,16" Margin="4,0,0,0">
                                 <TextBlock Text="Network Activity" Style="{StaticResource H2Font}" Margin="0,0,0,16"/>
-                                <TextBlock Text="TCP 10.0.0.5:54323 -> 185.12.X.X:443 (Suspicious IP)" Style="{StaticResource CodeMdFont}"/>
+                                <TextBlock Text="Pending telemetry..." Style="{StaticResource CodeMdFont}"/>
                             </StackPanel>
                         </Grid>
                     </Border>
@@ -66,7 +60,7 @@
                 <StackPanel Grid.Column="1" Margin="12,0,0,0">
                     <TextBlock Text="LIVE TELEMETRY" Style="{StaticResource LabelMdFont}" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,8"/>
                     <Border Background="Black" CornerRadius="8" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Padding="16">
-                        <TextBlock Text="[10:42:01] Process created: C:\Windows\System32\cmd.exe&#10;[10:42:02] Network connection attempt to 192.168.1.104:443&#10;[10:42:05] File write blocked: C:\Users\Public\malware.exe&#10;[10:42:08] Injection detected in lsass.exe" Style="{StaticResource CodeMdFont}" Foreground="{StaticResource TextPrimaryBrush}"/>
+                        <TextBlock x:Name="TxtLiveTelemetry" Text="[Waiting for telemetry...]" Style="{StaticResource CodeMdFont}" Foreground="{StaticResource TextPrimaryBrush}" TextWrapping="Wrap"/>
                     </Border>
                 </StackPanel>
             </Grid>

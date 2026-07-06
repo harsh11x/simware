@@ -12,13 +12,15 @@
   "type": "commonjs",
   "dependencies": {
     "@prisma/client": "^5.22.0",
+    "axios": "^1.18.1",
     "bullmq": "^5.79.2",
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "ioredis": "^5.11.1",
     "multer": "^2.2.0",
     "prisma": "^5.22.0",
-    "uuid": "^14.0.1"
+    "uuid": "^14.0.1",
+    "ws": "^8.21.0"
   },
   "devDependencies": {
     "@types/node": "^26.1.0",

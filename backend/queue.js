@@ -1,6 +1,9 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
+const threatIntel = require('./services/threatIntel');
+const aiHeuristics = require('./services/aiHeuristics');
+
 // Simple in-memory queue since Docker/Redis is not available locally
 class InMemoryQueue {
     constructor() {
@@ -39,39 +42,65 @@ class InMemoryQueue {
             where: { id: analysisId },
             data: { status: 'processing' }
         });
+        
+        if (global.broadcast) global.broadcast('analysis_start', { analysisId });
 
-        // 2. Real Orchestration would happen here (call static analysis tools)
-        console.log(`[Worker] Orchestrating Static Analysis...`);
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        // STAGE 1: STATIC THREAT INTEL (VirusTotal)
+        console.log(`[Worker] Stage 1: Querying Threat Intel for ${fileHash}...`);
+        const vtReport = await threatIntel.queryFileHash(fileHash);
         
-        const mockAiScore = Math.random() * 100;
-        const isMalicious = mockAiScore > 75;
-        
-        console.log(`[Worker] Correlating telemetry... AI Score: ${mockAiScore.toFixed(2)}`);
-        
-        const decision = isMalicious ? 'BLOCK' : 'ALLOW';
-        const status = 'completed';
+        if (vtReport.isMalicious) {
+            console.log(`[Worker] VT returned MALICIOUS. Short-circuiting to BLOCK.`);
+            await this.finalizeAnalysis(analysisId, 1.0, 'BLOCK', `Static Analysis Match: ${vtReport.classification} (${vtReport.enginesDetected} engines)`);
+            return;
+        }
 
-        // 4. Update final results
+        // STAGE 2: DYNAMIC SANDBOX EXECUTION (QEMU Simulation)
+        console.log(`[Worker] Stage 2: Orchestrating Dynamic Sandbox...`);
+        if (global.broadcast) global.broadcast('telemetry_log', { analysisId, log: '[QEMU Sandbox] Booting from hibernation snapshot...' });
+        
+        // Simulate Sandbox execution logs (In reality, QEMU/Agent streams this)
+        const simLogs = [
+            `[Sysmon] Process created: ${filePath || 'unknown.exe'}`,
+            `[Sysmon] Network connection attempt to 185.12.X.X:443`,
+            `[Sysmon] File write blocked: C:\\Windows\\System32\\malware.dll`
+        ];
+        
+        for (let log of simLogs) {
+            await new Promise(r => setTimeout(r, 600)); // Simulate time passing
+            if (global.broadcast) global.broadcast('telemetry_log', { analysisId, log });
+        }
+
+        // STAGE 3: AI BEHAVIORAL HEURISTICS (Gemini)
+        console.log(`[Worker] Stage 3: Requesting AI Behavioral Analysis...`);
+        const aiVerdict = await aiHeuristics.analyzeTelemetry(simLogs);
+        
+        console.log(`[Worker] AI Verdict: ${aiVerdict.decision} (Risk: ${aiVerdict.riskScore})`);
+        
+        await this.finalizeAnalysis(analysisId, aiVerdict.riskScore, aiVerdict.decision, aiVerdict.explanation);
+    }
+    
+    async finalizeAnalysis(analysisId, riskScore, decision, explanation) {
         await prisma.analysis.update({
             where: { id: analysisId },
             data: { 
-                status: status,
-                aiRiskScore: mockAiScore,
+                status: 'completed',
+                aiRiskScore: riskScore,
                 finalDecision: decision
             }
         });
 
-        if (isMalicious) {
+        if (decision === 'BLOCK') {
             await prisma.threatClassification.create({
                 data: {
                     analysisId: analysisId,
-                    category: mockAiScore > 90 ? 'Ransomware' : 'Trojan',
-                    confidence: mockAiScore
+                    category: explanation,
+                    confidence: riskScore * 100
                 }
             });
         }
         
+        if (global.broadcast) global.broadcast('analysis_complete', { analysisId, decision, riskScore, explanation });
         console.log(`[Worker] Finished processing ${analysisId}. Decision: ${decision}`);
     }
 }
